@@ -7,7 +7,7 @@ int main()
 	std::cout << "HEY!" << std::endl;
 
 	// Using the "C" standard IO
-	printf("Hello world!");
+	printf("Hello world! This is using the C library.");
 
 	return 0;
 }
