@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cSword.cpp" />
     <ClCompile Include="HelloWorld.cpp" />
     <ClCompile Include="theMain.cpp" />
   </ItemGroup>
