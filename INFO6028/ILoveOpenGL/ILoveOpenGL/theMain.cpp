@@ -74,7 +74,9 @@ int main(void)
     glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+// Tiny change from the original documentation code
+    gladLoadGLLoader( (GLADloadproc) glfwGetProcAddress);
+//    gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
     // NOTE: OpenGL error checks have been omitted for brevity
