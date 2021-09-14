@@ -3,7 +3,15 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#include "linmath.h"
+//#include "linmath.h"
+#include <glm/glm.hpp>
+#include <glm/vec3.hpp> // glm::vec3
+#include <glm/vec4.hpp> // glm::vec4
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtc/matrix_transform.hpp> 
+// glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -113,7 +121,8 @@ int main(void)
     {
         float ratio;
         int width, height;
-        mat4x4 m, p, mvp;
+        glm::mat4 m, p, v, mvp;
+//        mat4x4 m, p, mvp;
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float)height;
@@ -121,10 +130,35 @@ int main(void)
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mat4x4_mul(mvp, p, m);
+        m = glm::mat4(1.0f);
+        //mat4x4_identity(m);
+
+        glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
+            (float)glfwGetTime(),
+            glm::vec3(0.0f, 0.0, 1.0f));
+
+        m = m * rotateZ;
+
+        //        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+
+        p = glm::perspective(0.6f,
+            ratio,
+            0.1f,
+            1000.0f);
+
+        v = glm::mat4(1.0f);
+
+        glm::vec3 cameraEye = glm::vec3(0.0, 0.0, -4.0f);
+        glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+
+        v = glm::lookAt(cameraEye,
+            cameraTarget,
+            upVector);
+//        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        
+        mvp = p * v * m;
+//        mat4x4_mul(mvp, p, m);
 
         glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)mvp);
